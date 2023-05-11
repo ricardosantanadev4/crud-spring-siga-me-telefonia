@@ -38,9 +38,8 @@ public class SigaMeController {
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<Sigame> FindById(@PathVariable @NotNull @Positive Long id) {
-		return sigaMeService.FindById(id).map(recordFound -> ResponseEntity.ok(recordFound))
-				.orElse(ResponseEntity.notFound().build());
+	public Sigame FindById(@PathVariable @NotNull @Positive Long id) {
+		return sigaMeService.FindById(id);
 	}
 
 	@PostMapping
@@ -50,18 +49,14 @@ public class SigaMeController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Sigame> Update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Sigame record) {
-		return sigaMeService.Update(id, record).map(recordFound -> {
-			return ResponseEntity.ok(recordFound);
-		}).orElse(ResponseEntity.notFound().build());
+	public Sigame Update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Sigame record) {
+		return sigaMeService.Update(id, record);
 	}
 
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Void> Delete(@PathVariable @NotNull @Positive Long id) {
-		if (sigaMeService.Delete(id)) {
-			return ResponseEntity.noContent().<Void>build();
-		}
-		return ResponseEntity.notFound().build();
+	public void Delete(@PathVariable @NotNull @Positive Long id) {
+		sigaMeService.Delete(id);
 	}
 
 }
