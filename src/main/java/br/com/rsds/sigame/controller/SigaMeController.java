@@ -17,55 +17,51 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.rsds.sigame.model.Sigame;
-import br.com.rsds.sigame.repository.SigaMeRepository;
+import br.com.rsds.sigame.service.SigaMeService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping("/api/sigaMe")
-@AllArgsConstructor
 @Validated
 public class SigaMeController {
-	SigaMeRepository sigaMeRepository;
+	private final SigaMeService sigaMeService;
+
+	public SigaMeController(SigaMeService sigaMeService) {
+		this.sigaMeService = sigaMeService;
+	}
 
 	@GetMapping
 	public @ResponseBody List<Sigame> list() {
-		return sigaMeRepository.findAll();
+		return sigaMeService.list();
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Sigame> FindById(@PathVariable @NotNull @Positive Long id) {
-		return sigaMeRepository.findById(id).map(recordFound -> ResponseEntity.ok(recordFound))
+		return sigaMeService.FindById(id).map(recordFound -> ResponseEntity.ok(recordFound))
 				.orElse(ResponseEntity.notFound().build());
 	}
 
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public Sigame create(@RequestBody @Valid Sigame record) {
-		return sigaMeRepository.save(record);
+		return sigaMeService.create(record);
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Sigame> Update(@PathVariable @NotNull @Positive Long id, @RequestBody Sigame record) {
-		return sigaMeRepository.findById(id).map(recordFound -> {
-			recordFound.setNome(record.getNome());
-			recordFound.setTipo(record.getTipo());
-			recordFound.setCategoria(record.getCategoria());
-			recordFound.setStatus(record.getStatus());
-			recordFound.setRamal(record.getRamal());
-			recordFound.setDestino(record.getDestino());
-			return ResponseEntity.ok(sigaMeRepository.save(recordFound));
+	public ResponseEntity<Sigame> Update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Sigame record) {
+		return sigaMeService.Update(id, record).map(recordFound -> {
+			return ResponseEntity.ok(recordFound);
 		}).orElse(ResponseEntity.notFound().build());
 	}
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> Delete(@PathVariable @NotNull @Positive Long id) {
-		return sigaMeRepository.findById(id).map(recordFound -> {
-			sigaMeRepository.deleteById(id);
+		if (sigaMeService.Delete(id)) {
 			return ResponseEntity.noContent().<Void>build();
-		}).orElse(ResponseEntity.notFound().build());
+		}
+		return ResponseEntity.notFound().build();
 	}
 
 }
