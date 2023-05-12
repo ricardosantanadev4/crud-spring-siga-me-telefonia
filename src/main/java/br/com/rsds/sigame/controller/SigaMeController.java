@@ -3,7 +3,6 @@ package br.com.rsds.sigame.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,8 +52,8 @@ public class SigaMeController {
 		return sigaMeService.Update(id, record);
 	}
 
-	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void Delete(@PathVariable @NotNull @Positive Long id) {
 		sigaMeService.Delete(id);
 	}

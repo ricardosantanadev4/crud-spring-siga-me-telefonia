@@ -1,15 +1,10 @@
 package br.com.rsds.sigame.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.rsds.sigame.exception.RecordNotFoundException;
@@ -28,22 +23,18 @@ public class SigaMeService {
 		this.sigaMeRepository = sigaMeRepository;
 	}
 
-	@GetMapping
 	public List<Sigame> list() {
 		return sigaMeRepository.findAll();
 	}
 
-	@GetMapping("/{id}")
 	public Sigame FindById(@PathVariable @NotNull @Positive Long id) {
 		return sigaMeRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
-	@PostMapping
 	public Sigame create(@Valid Sigame record) {
 		return sigaMeRepository.save(record);
 	}
 
-	@PutMapping("/{id}")
 	public Sigame Update(@NotNull @Positive Long id, @RequestBody @Valid Sigame record) {
 		return sigaMeRepository.findById(id).map(recordFound -> {
 			recordFound.setNome(record.getNome());
@@ -56,7 +47,6 @@ public class SigaMeService {
 		}).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
-	@DeleteMapping("/{id}")
 	public Sigame Delete(@PathVariable @NotNull @Positive Long id) {
 		return sigaMeRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
 	}
