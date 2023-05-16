@@ -47,7 +47,7 @@ public class SigaMeService {
 		}).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
-	public Sigame Delete(@PathVariable @NotNull @Positive Long id) {
-		return sigaMeRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
+	public void Delete(@PathVariable @NotNull @Positive Long id) {
+		sigaMeRepository.delete(sigaMeRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id)));
 	}
 }
