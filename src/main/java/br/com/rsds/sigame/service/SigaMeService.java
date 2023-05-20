@@ -1,14 +1,16 @@
 package br.com.rsds.sigame.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import br.com.rsds.sigame.dto.SigaMeDTO;
+import br.com.rsds.sigame.dto.mapper.SigaMeMapper;
 import br.com.rsds.sigame.exception.RecordNotFoundException;
-import br.com.rsds.sigame.model.Sigame;
 import br.com.rsds.sigame.repository.SigaMeRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -18,32 +20,34 @@ import jakarta.validation.constraints.Positive;
 @Validated
 public class SigaMeService {
 	private final SigaMeRepository sigaMeRepository;
+	private final SigaMeMapper sigaMeMapper;
 
-	public SigaMeService(SigaMeRepository sigaMeRepository) {
+	public SigaMeService(SigaMeRepository sigaMeRepository, SigaMeMapper sigaMeMapper) {
 		this.sigaMeRepository = sigaMeRepository;
+		this.sigaMeMapper = sigaMeMapper;
 	}
 
-	public List<Sigame> list() {
-		return sigaMeRepository.findAll();
+	public List<SigaMeDTO> list() {
+		return sigaMeRepository.findAll().stream().map(sigaMeMapper::toDO).collect(Collectors.toList());
 	}
 
-	public Sigame FindById(@PathVariable @NotNull @Positive Long id) {
-		return sigaMeRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(id));
+	public SigaMeDTO FindById(@PathVariable @NotNull @Positive Long id) {
+		return sigaMeRepository.findById(id).map(sigaMeMapper::toDO).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 
-	public Sigame create(@Valid Sigame record) {
-		return sigaMeRepository.save(record);
+	public SigaMeDTO create(@Valid @NotNull SigaMeDTO record) {
+		return sigaMeMapper.toDO(sigaMeRepository.save(sigaMeMapper.toEntity(record)));
 	}
 
-	public Sigame Update(@NotNull @Positive Long id, @RequestBody @Valid Sigame record) {
+	public SigaMeDTO Update(@NotNull @Positive Long id, @RequestBody @Valid @NotNull SigaMeDTO record) {
 		return sigaMeRepository.findById(id).map(recordFound -> {
-			recordFound.setNome(record.getNome());
-			recordFound.setTipo(record.getTipo());
-			recordFound.setCategoria(record.getCategoria());
-			recordFound.setStatus(record.getStatus());
-			recordFound.setRamal(record.getRamal());
-			recordFound.setDestino(record.getDestino());
-			return sigaMeRepository.save(recordFound);
+			recordFound.setNome(record.nome());
+			recordFound.setTipo(record.tipo());
+			recordFound.setCategoria(record.categoria());
+			recordFound.setStatus(record.status());
+			recordFound.setRamal(record.ramal());
+			recordFound.setDestino(record.destino());
+			return sigaMeMapper.toDO(sigaMeRepository.save(recordFound));
 		}).orElseThrow(() -> new RecordNotFoundException(id));
 	}
 

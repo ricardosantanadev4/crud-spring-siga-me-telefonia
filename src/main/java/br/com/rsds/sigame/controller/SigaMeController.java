@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.rsds.sigame.model.Sigame;
+import br.com.rsds.sigame.dto.SigaMeDTO;
 import br.com.rsds.sigame.service.SigaMeService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -32,23 +32,23 @@ public class SigaMeController {
 	}
 
 	@GetMapping
-	public @ResponseBody List<Sigame> list() {
+	public @ResponseBody List<SigaMeDTO> list() {
 		return sigaMeService.list();
 	}
 
 	@GetMapping("/{id}")
-	public Sigame FindById(@PathVariable @NotNull @Positive Long id) {
+	public SigaMeDTO FindById(@PathVariable @NotNull @Positive Long id) {
 		return sigaMeService.FindById(id);
 	}
 
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
-	public Sigame create(@RequestBody @Valid Sigame record) {
+	public SigaMeDTO create(@RequestBody @Valid @NotNull SigaMeDTO record) {
 		return sigaMeService.create(record);
 	}
 
 	@PutMapping("/{id}")
-	public Sigame Update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid Sigame record) {
+	public SigaMeDTO Update(@PathVariable @NotNull @Positive Long id, @RequestBody @Valid SigaMeDTO record) {
 		return sigaMeService.Update(id, record);
 	}
 
