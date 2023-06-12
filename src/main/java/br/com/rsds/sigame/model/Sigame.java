@@ -2,7 +2,12 @@ package br.com.rsds.sigame.model;
 
 import org.hibernate.validator.constraints.Length;
 
+import br.com.rsds.sigame.enums.Category;
+import br.com.rsds.sigame.enums.Type;
+import br.com.rsds.sigame.enums.converters.CategoryConverter;
+import br.com.rsds.sigame.enums.converters.TypeConverter;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,21 +26,19 @@ public class Sigame {
 
 	@NotBlank
 	@NotNull
-	@Column(name = "NOME", nullable = false, length = 100)
+	@Column(name = "NAME", nullable = false, length = 100)
 	@Length(min = 1, max = 100)
-	private String nome;
+	private String name;
 
-	@NotBlank
 	@NotNull
-	@Column(name = "TIPO", nullable = false, length = 11)
-	@Length(min = 10, max = 11)
-	private String tipo;
+	@Column(name = "TYPE", nullable = false, length = 11)
+	@Convert(converter = TypeConverter.class)
+	private Type type;
 
-	@NotBlank
 	@NotNull
-	@Column(name = "CATEGORIA", nullable = false, length = 7)
-	@Length(min = 5, max = 7)
-	private String categoria;
+	@Column(name = "CATEGORY", nullable = false, length = 7)
+	@Convert(converter = CategoryConverter.class)
+	private Category category;
 
 	@NotBlank
 	@NotNull
@@ -52,8 +55,8 @@ public class Sigame {
 
 	@NotBlank
 	@NotNull
-	@Column(name = "DESTINO", nullable = false, length = 12)
+	@Column(name = "DESTINY", nullable = false, length = 12)
 	@Length(min = 4, max = 12)
-	private String destino;
+	private String destiny;
 
 }

@@ -41,12 +41,12 @@ public class SigaMeService {
 
 	public SigaMeDTO Update(@NotNull @Positive Long id, @RequestBody @Valid @NotNull SigaMeDTO record) {
 		return sigaMeRepository.findById(id).map(recordFound -> {
-			recordFound.setNome(record.nome());
-			recordFound.setTipo(record.tipo());
-			recordFound.setCategoria(record.categoria());
+			recordFound.setName(record.name());
+			recordFound.setType(sigaMeMapper.convertTypeValue(record.type()));
+			recordFound.setCategory(sigaMeMapper.convertCategoryValue(record.category()));
 			recordFound.setStatus(record.status());
 			recordFound.setRamal(record.ramal());
-			recordFound.setDestino(record.destino());
+			recordFound.setDestiny(record.destiny());
 			return sigaMeMapper.toDO(sigaMeRepository.save(recordFound));
 		}).orElseThrow(() -> new RecordNotFoundException(id));
 	}
