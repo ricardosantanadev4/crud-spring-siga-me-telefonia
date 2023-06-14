@@ -44,7 +44,7 @@ public class SigaMeService {
 			recordFound.setName(record.name());
 			recordFound.setType(sigaMeMapper.convertTypeValue(record.type()));
 			recordFound.setCategory(sigaMeMapper.convertCategoryValue(record.category()));
-			recordFound.setStatus(record.status());
+			recordFound.setStatus(sigaMeMapper.convertStatusValue(record.status()));
 			recordFound.setRamal(record.ramal());
 			recordFound.setDestiny(record.destiny());
 			return sigaMeMapper.toDO(sigaMeRepository.save(recordFound));

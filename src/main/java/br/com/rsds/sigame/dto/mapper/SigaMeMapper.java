@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.rsds.sigame.dto.SigaMeDTO;
 import br.com.rsds.sigame.enums.Category;
+import br.com.rsds.sigame.enums.Status;
 import br.com.rsds.sigame.enums.Type;
 import br.com.rsds.sigame.model.Sigame;
 
@@ -18,7 +19,7 @@ public class SigaMeMapper {
 		}
 
 		return new SigaMeDTO(sigame.getId(), sigame.getName(), sigame.getType().getValue(),
-				sigame.getCategory().getValue(), sigame.getStatus(), sigame.getRamal(), sigame.getDestiny());
+				sigame.getCategory().getValue(), sigame.getStatus().getValue(), sigame.getRamal(), sigame.getDestiny());
 	}
 
 	public Sigame toEntity(SigaMeDTO sigaMeDTO) {
@@ -35,7 +36,7 @@ public class SigaMeMapper {
 		sigame.setName(sigaMeDTO.name());
 		sigame.setType(convertTypeValue(sigaMeDTO.type()));
 		sigame.setCategory(convertCategoryValue(sigaMeDTO.category()));
-		sigame.setStatus(sigaMeDTO.status());
+		sigame.setStatus(convertStatusValue(sigaMeDTO.status()));
 		sigame.setRamal(sigaMeDTO.ramal());
 		sigame.setDestiny(sigaMeDTO.destiny());
 		return sigame;
@@ -52,6 +53,11 @@ public class SigaMeMapper {
 		case "Parcial" -> Category.PARCIAL;
 		default -> throw new IllegalArgumentException("Categoria inválida: " + value);
 		};
+	}
+
+	public Status convertStatusValue(String value) {
+		return Stream.of(Status.values()).filter(s -> s.getValue().equals(value)).findFirst()
+				.orElseThrow(IllegalArgumentException::new);
 	}
 
 }

@@ -26,7 +26,6 @@ public class SigaMeApplication {
 			sigaMe.setName("6000");
 			sigaMe.setType(Type.PERMANENTE);
 			sigaMe.setCategory(Category.PARCIAL);
-			sigaMe.setStatus("Aberto");
 			sigaMe.setRamal("6000");
 			sigaMe.setDestiny("6001");
 			sigaMeRepository.save(sigaMe);

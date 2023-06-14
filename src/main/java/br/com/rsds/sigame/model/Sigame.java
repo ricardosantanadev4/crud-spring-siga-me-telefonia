@@ -3,8 +3,10 @@ package br.com.rsds.sigame.model;
 import org.hibernate.validator.constraints.Length;
 
 import br.com.rsds.sigame.enums.Category;
+import br.com.rsds.sigame.enums.Status;
 import br.com.rsds.sigame.enums.Type;
 import br.com.rsds.sigame.enums.converters.CategoryConverter;
+import br.com.rsds.sigame.enums.converters.StatusConverter;
 import br.com.rsds.sigame.enums.converters.TypeConverter;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
@@ -14,7 +16,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Entity
@@ -40,12 +41,10 @@ public class Sigame {
 	@Convert(converter = CategoryConverter.class)
 	private Category category;
 
-	@NotBlank
 	@NotNull
 	@Column(name = "STATUS", nullable = false, length = 9)
-	@Length(min = 6, max = 9)
-	@Pattern(regexp = "Aberto|Concluido")
-	private String status = StatusSigaMe.Aberto.toString();
+	@Convert(converter = StatusConverter.class)
+	private Status status = Status.ABERTO;
 
 	@NotBlank
 	@NotNull
